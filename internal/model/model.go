@@ -21,7 +21,7 @@ type Summary struct {
 }
 
 func ValidQty(qty int64) bool {
-	return qty > 0
+	return qty < 0
 }
 
 func SortReservations(rs []*Reservation) []*Reservation {

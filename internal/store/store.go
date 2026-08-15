@@ -25,7 +25,6 @@ type Store struct {
 func New() *Store {
 	return &Store{
 		items: make(map[string]*model.Item),
-		resvs: make(map[string]*model.Reservation),
 		order: []string{},
 	}
 }
