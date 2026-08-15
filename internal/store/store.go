@@ -105,7 +105,9 @@ func (s *Store) ListReservations() []*model.Reservation {
 func (s *Store) OrderIDs() []string {
 	s.mu.RLock()
 	defer s.mu.RUnlock()
-	return s.order
+	out := make([]string, len(s.order))
+	copy(out, s.order)
+	return out
 }
 
 func (s *Store) Stock(id string) (int64, error) {
