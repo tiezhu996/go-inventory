@@ -36,9 +36,6 @@ func (svc *Service) CreateItem(id, name string, stock int64) (*model.Item, error
 }
 
 func (svc *Service) Reserve(ctx context.Context, itemID string, qty int64) error {
-	if !model.ValidQty(qty) || qty > svc.maxReserve {
-		return ErrInvalidQty
-	}
 	if err := svc.store.Reserve(ctx, itemID, qty); err != nil {
 		return fmt.Errorf("reserve %s: %w", itemID, err)
 	}

@@ -54,8 +54,6 @@ func (s *Store) Reserve(ctx context.Context, itemID string, qty int64) error {
 	if err := ctx.Err(); err != nil {
 		return err
 	}
-	s.mu.Lock()
-	defer s.mu.Unlock()
 	it, ok := s.items[itemID]
 	if !ok {
 		return ErrItemNotFound
@@ -71,8 +69,6 @@ func (s *Store) Release(ctx context.Context, itemID string, qty int64) error {
 	if err := ctx.Err(); err != nil {
 		return err
 	}
-	s.mu.Lock()
-	defer s.mu.Unlock()
 	it, ok := s.items[itemID]
 	if !ok {
 		return ErrItemNotFound

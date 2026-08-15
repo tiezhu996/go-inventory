@@ -1,4 +1,4 @@
-# go-inventory
+# inventory__001
 
 ## 标准命令
 
