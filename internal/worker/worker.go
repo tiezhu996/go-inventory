@@ -36,7 +36,11 @@ func (p *Pool) Run(ctx context.Context) model.Summary {
 	go func() {
 		defer close(ch)
 		for _, pg := range pages {
-			ch <- pg
+			select {
+			case <-ctx.Done():
+				return
+			case ch <- pg:
+			}
 		}
 	}()
 
@@ -50,6 +54,11 @@ func (p *Pool) Run(ctx context.Context) model.Summary {
 			for page := range ch {
 				var local model.Summary
 				for _, r := range page {
+					select {
+					case <-ctx.Done():
+						return
+					default:
+					}
 					if err := p.disp.Dispatch(ctx, r); err != nil {
 						local.Failed++
 						continue

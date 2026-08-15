@@ -39,7 +39,7 @@ func (svc *Service) Reserve(ctx context.Context, itemID string, qty int64) error
 	if !model.ValidQty(qty) || qty > svc.maxReserve {
 		return ErrInvalidQty
 	}
-	if err := svc.store.Reserve(context.Background(), itemID, qty); err != nil {
+	if err := svc.store.Reserve(ctx, itemID, qty); err != nil {
 		return fmt.Errorf("reserve %s: %w", itemID, err)
 	}
 	svc.seq++
