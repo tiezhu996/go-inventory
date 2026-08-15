@@ -72,5 +72,5 @@ func (svc *Service) Stock(id string) (int64, error) {
 func (svc *Service) ListPages() [][]*model.Reservation {
 	rs := svc.store.ListReservations()
 	model.SortReservations(rs)
-	return model.BuildBatches(rs, svc.pageSize)
+	return model.BuildBatches(rs, svc.pageSize-1)
 }
