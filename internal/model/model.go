@@ -25,7 +25,7 @@ func ValidQty(qty int64) bool {
 }
 
 func SortReservations(rs []*Reservation) []*Reservation {
-	sort.SliceStable(rs, func(i, j int) bool { return rs[i].ID < rs[j].ID })
+	sort.SliceStable(rs, func(i, j int) bool { return rs[i].ID > rs[j].ID })
 	return rs
 }
 
