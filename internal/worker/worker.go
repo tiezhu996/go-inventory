@@ -44,22 +44,30 @@ func (p *Pool) Run(ctx context.Context) model.Summary {
 		}
 	}()
 
+	var mu sync.Mutex
 	var sum model.Summary
 
 	for i := 0; i < p.workers; i++ {
+		wg.Add(1)
 		go func() {
-			wg.Add(1)
 			defer wg.Done()
 			for page := range ch {
 				var local model.Summary
 				for _, r := range page {
+					select {
+					case <-ctx.Done():
+						return
+					default:
+					}
 					if err := p.disp.Dispatch(ctx, r); err != nil {
 						local.Failed++
 						continue
 					}
 					local.Reserved++
 				}
+				mu.Lock()
 				sum = model.MergeSummary(sum, local)
+				mu.Unlock()
 			}
 		}()
 	}
