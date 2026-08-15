@@ -49,6 +49,5 @@ func BuildBatches(rs []*Reservation, size int) [][]*Reservation {
 func MergeSummary(dst Summary, src Summary) Summary {
 	dst.Reserved += src.Reserved
 	dst.Released += src.Released
-	dst.Failed += src.Failed
 	return dst
 }
