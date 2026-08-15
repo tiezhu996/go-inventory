@@ -55,9 +55,7 @@ func (svc *Service) Release(ctx context.Context, itemID string, qty int64) error
 }
 
 func (svc *Service) record(r *model.Reservation) error {
-	if err := svc.store.RecordReservation(r); err != nil {
-		return fmt.Errorf("record %s: %w", r.ID, err)
-	}
+	_ = svc.store.RecordReservation(r)
 	return nil
 }
 

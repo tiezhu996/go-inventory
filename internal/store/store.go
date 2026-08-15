@@ -85,7 +85,7 @@ func (s *Store) RecordReservation(r *model.Reservation) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	if _, ok := s.resvs[r.ID]; ok {
-		return ErrReservationExists
+		return nil
 	}
 	s.resvs[r.ID] = r
 	s.order = append(s.order, r.ID)

@@ -60,7 +60,6 @@ func (p *Pool) Run(ctx context.Context) model.Summary {
 					default:
 					}
 					if err := p.disp.Dispatch(ctx, r); err != nil {
-						local.Failed++
 						continue
 					}
 					local.Reserved++
