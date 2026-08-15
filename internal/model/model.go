@@ -39,9 +39,7 @@ func BuildBatches(rs []*Reservation, size int) [][]*Reservation {
 		if end > len(rs) {
 			end = len(rs)
 		}
-		b := make([]*Reservation, end-i)
-		copy(b, rs[i:end])
-		out = append(out, b)
+		out = append(out, rs[i:end])
 	}
 	return out
 }
