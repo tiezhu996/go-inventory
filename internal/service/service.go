@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"sync/atomic"
 
 	"inventory/internal/config"
 	"inventory/internal/model"
@@ -16,7 +17,7 @@ type Service struct {
 	store      *store.Store
 	pageSize   int
 	maxReserve int64
-	seq        int64
+	seq        atomic.Int64
 }
 
 func New(s *store.Store, cfg *config.Config) *Service {
@@ -36,11 +37,14 @@ func (svc *Service) CreateItem(id, name string, stock int64) (*model.Item, error
 }
 
 func (svc *Service) Reserve(ctx context.Context, itemID string, qty int64) error {
+	if !model.ValidQty(qty) || (svc.maxReserve > 0 && qty > svc.maxReserve) {
+		return ErrInvalidQty
+	}
 	if err := svc.store.Reserve(ctx, itemID, qty); err != nil {
 		return fmt.Errorf("reserve %s: %w", itemID, err)
 	}
-	svc.seq++
-	r := &model.Reservation{ID: fmt.Sprintf("r-%s-%d-%d", itemID, qty, svc.seq), ItemID: itemID, Qty: qty}
+	seq := svc.seq.Add(1)
+	r := &model.Reservation{ID: fmt.Sprintf("r-%s-%d-%d", itemID, qty, seq), ItemID: itemID, Qty: qty}
 	return svc.record(r)
 }
 

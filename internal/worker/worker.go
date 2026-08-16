@@ -44,11 +44,14 @@ func (p *Pool) Run(ctx context.Context) model.Summary {
 		}
 	}()
 
-	var sum model.Summary
+	var (
+		sum model.Summary
+		mu  sync.Mutex
+	)
 
 	for i := 0; i < p.workers; i++ {
+		wg.Add(1)
 		go func() {
-			wg.Add(1)
 			defer wg.Done()
 			for page := range ch {
 				var local model.Summary
@@ -59,7 +62,9 @@ func (p *Pool) Run(ctx context.Context) model.Summary {
 					}
 					local.Reserved++
 				}
+				mu.Lock()
 				sum = model.MergeSummary(sum, local)
+				mu.Unlock()
 			}
 		}()
 	}
