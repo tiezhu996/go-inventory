@@ -3,7 +3,6 @@ package store
 import (
 	"context"
 	"errors"
-	"fmt"
 	"sync"
 
 	"inventory/internal/model"
@@ -62,7 +61,7 @@ func (s *Store) Reserve(ctx context.Context, itemID string, qty int64) error {
 		return ErrItemNotFound
 	}
 	if it.Stock < qty {
-		return fmt.Errorf("insufficient stock for %s", itemID)
+		return ErrInsufficient
 	}
 	it.Stock -= qty
 	return nil
