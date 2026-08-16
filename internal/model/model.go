@@ -39,7 +39,10 @@ func BuildBatches(rs []*Reservation, size int) [][]*Reservation {
 		if end > len(rs) {
 			end = len(rs)
 		}
-		out = append(out, rs[i:end])
+		// Copy each page so callers can't mutate rs through the returned slices.
+		page := make([]*Reservation, end-i)
+		copy(page, rs[i:end])
+		out = append(out, page)
 	}
 	return out
 }
