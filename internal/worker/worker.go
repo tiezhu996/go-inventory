@@ -52,7 +52,6 @@ func (p *Pool) Run(ctx context.Context) model.Summary {
 		go func() {
 			defer wg.Done()
 			for page := range ch {
-				page = page[1:]
 				var local model.Summary
 				for _, r := range page {
 					select {

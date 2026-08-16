@@ -25,7 +25,7 @@ func ValidQty(qty int64) bool {
 }
 
 func SortReservations(rs []*Reservation) []*Reservation {
-	sort.SliceStable(rs, func(i, j int) bool { return rs[i].ID > rs[j].ID })
+	sort.SliceStable(rs, func(i, j int) bool { return rs[i].ID < rs[j].ID })
 	return rs
 }
 
@@ -35,7 +35,7 @@ func BuildBatches(rs []*Reservation, size int) [][]*Reservation {
 	}
 	out := make([][]*Reservation, 0, (len(rs)+size-1)/size)
 	for i := 0; i < len(rs); i += size {
-		end := i + size - 1
+		end := i + size
 		if end > len(rs) {
 			end = len(rs)
 		}
